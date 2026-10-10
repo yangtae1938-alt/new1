@@ -1,0 +1,20 @@
+[project]
+name = "microcap-radar"
+version = "1.0.0"
+description = "ZERO-BASE 미국 마이크로캡 급등 전 포착 레이더 (Polygon + SEC EDGAR)"
+requires-python = ">=3.10"
+dependencies = ["requests>=2.31", "pandas>=2.0", "numpy>=1.24", "pyyaml>=6.0", "tzdata"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+app = ["streamlit>=1.35"]
+
+[project.scripts]
+radar = "radar.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

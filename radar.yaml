@@ -1,0 +1,55 @@
+# ZERO-BASE v1.0 임계값. 모두 운영상 기준이며 공식 시장 표준이 아님.
+universe:
+  exchanges: [NASDAQ, NYSE, NYSE_AMERICAN]
+  min_price: 0.05
+  stage1_max_cap: 2000000000     # 이 값 초과(시총 확인된 경우)는 1차 단계에서 제외
+  cap_classes: {nano: 50000000, ultra_micro: 200000000, micro: 500000000}
+  extended_min_tier: 30          # 5억 달러 이상은 거래량 배수 티어가 이 값 이상일 때만 확장 관찰군
+
+stage1:
+  min_day_volume: 10000
+  max_stage2: 300                # 2단계(분봉 조회)로 보낼 최대 종목 수
+
+intraday:
+  bucket_minutes: 5
+  session_start: "04:00"         # 프리마켓 포함 (ET)
+  session_end: "20:00"
+  baseline_days: 20              # 같은 시간대 비교에 쓰는 과거 거래일 수
+  min_baseline_days: 10
+  min_expected_shares: 500       # 같은 시간대 기대 거래량 하한(분모 착시 방지)
+  signal_rvol: 3.0               # 최초 이상 신호 판정 배수
+  signal_min_shares: 5000
+  workers: 4
+
+engines:
+  pre_breakout:
+    window_days: 13
+    baseline_days: 52
+    early_ratio: 2.0
+    strict_ratio: 25.0
+    compression_max: 0.8         # 최근 5일 변동폭 / 이전 20일 변동폭
+    max_gain: 0.30               # 13일 상승률 상한
+  volume_first:
+    min_rvol: 3.0
+    max_price_move: 0.15         # 전일 종가 대비 상승률 상한
+  monster:
+    tiers: [10, 30, 50, 100]
+    min_avg_volume: 20000        # 20일 평균이 이보다 작으면 분모 착시 경고
+  reignition:
+    lookback_days: 40
+    spike_vol_mult: 5.0
+    spike_gain: 0.5
+    min_drawdown: 0.20
+    contraction_max: 0.30
+    reignite_rvol: 3.0
+
+classify:
+  surge_day_gain: 0.50           # 전일 종가 대비 이 이상이면 ④ 이미 급등
+  surge_since_signal: 0.30       # 최초 신호 이후 이 이상이면 ④
+  min_history_days: 30
+
+sec:
+  news_lookback_hours: 48
+  supply_lookback_days: 30
+  high_supply_days: 7
+  keyword_scan_max_docs: 8
